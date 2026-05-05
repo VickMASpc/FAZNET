@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN CONSOLE | FAZNET</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            max-width: 600px;
+            margin: 100px auto;
+            background: var(--panel-color);
+            padding: 3rem;
+            border: 1px solid var(--freddy-purple);
+            box-shadow: 0 0 30px rgba(136, 51, 255, 0.1);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            border-radius: 4px;
+        }
+        input:focus {
+            border-color: var(--freddy-purple);
+            outline: none;
+        }
+        .btn {
+            background: var(--freddy-purple);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            cursor: pointer;
+            font-family: 'Creepster', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            width: 100%;
+            transition: var(--transition);
+        }
+        .btn:hover {
+            background: #a055ff;
+            box-shadow: 0 0 15px rgba(136, 51, 255, 0.5);
+        }
+        #login-section, #post-section {
+            display: none;
+        }
+        #login-section.active, #post-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1 class="glitch" style="text-align: center; margin-bottom: 2rem;">ADMIN CONSOLE</h1>
+
+        <!-- Mock Login Section -->
+        <div id="login-section" class="active">
+            <div class="form-group">
+                <label>Security ID</label>
+                <input type="text" id="username" placeholder="Enter Serial No.">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+            <button class="btn" onclick="mockLogin()">ACCESS SYSTEM</button>
+        </div>
+
+        <!-- Post Creation Section (UI only for now) -->
+        <div id="post-section">
+            <h2 style="margin-bottom: 1.5rem; color: var(--foxy-red)">NEW INCIDENT REPORT</h2>
+            <div class="form-group">
+                <label>Report Title</label>
+                <input type="text" id="post-title">
+            </div>
+            <div class="form-group">
+                <label>Report Level</label>
+                <select id="post-category">
+                    <option>Maintenance</option>
+                    <option>Security</option>
+                    <option>Internal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Summary</label>
+                <textarea id="post-excerpt" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Full Content (HTML allowed)</label>
+                <textarea id="post-content" rows="6"></textarea>
+            </div>
+            <button class="btn" onclick="savePost()">SUBMIT TO DATABASE</button>
+            <p id="status-msg" style="margin-top: 1rem; color: #66ff66; display: none;">Report Uploaded Successfully.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { addPost } from './js/db.js';
+
+        window.mockLogin = function() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if(user === "admin" && pass === "freddy") {
+                document.getElementById('login-section').classList.remove('active');
+                document.getElementById('post-section').classList.add('active');
+            } else {
+                alert("ACCESS DENIED: INVALID CREDENTIALS");
+            }
+        }
+
+        window.savePost = async function() {
+            const postData = {
+                title: document.getElementById('post-title').value,
+                category: document.getElementById('post-category').value,
+                excerpt: document.getElementById('post-excerpt').value,
+                content: document.getElementById('post-content').value,
+                image: 'assets/placeholder.png' // Default for now
+            };
+
+            try {
+                const success = await addPost(postData);
+                if (success) {
+                    document.getElementById('status-msg').innerText = "Report Uploaded to FAZNET.";
+                } else {
+                    document.getElementById('status-msg').innerText = "Mock Mode: Report saved locally only.";
+                    document.getElementById('status-msg').style.color = "orange";
+                }
+                document.getElementById('status-msg').style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } catch (error) {
+                alert("Failed to upload report: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

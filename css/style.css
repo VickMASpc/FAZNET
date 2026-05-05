@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;700&family=Outfit:wght@300;600&family=Space+Mono&display=swap');
+
+:root {
+    --bg-color: #050505;
+    --panel-color: #0c0c0c;
+    --freddy-purple: #8833ff;
+    --foxy-red: #ff3333;
+    --bonnie-blue: #33ccff;
+    --chica-yellow: #ffcc00;
+    --text-primary: #e0e0e0;
+    --text-secondary: #999999;
+    --accent: var(--freddy-purple);
+    --border-glow: 0 0 10px rgba(136, 51, 255, 0.3);
+    --neon-glow: 0 0 20px rgba(136, 51, 255, 0.5);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, .glitch-font {
+    font-family: 'Creepster', cursive;
+    letter-spacing: 2px;
+}
+
+/* CRT Screen Effect */
+body::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 9999;
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
+/* Header */
+header {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5), var(--bg-color)), url('../assets/hero-bg.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-bottom: 2px solid var(--freddy-purple);
+    box-shadow: 0 0 30px rgba(136, 51, 255, 0.2);
+    position: relative;
+}
+
+.hero-content h1 {
+    font-size: 6rem;
+    color: var(--freddy-purple);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 1rem;
+    animation: flicker 4s infinite;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+}
+
+/* Main Layout */
+.container {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.section-title {
+    font-size: 3rem;
+    color: var(--foxy-red);
+    margin-bottom: 3rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+}
+
+/* Blog Grid */
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.post-card {
+    background: var(--panel-color);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: var(--transition);
+    position: relative;
+    cursor: pointer;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--freddy-purple);
+    box-shadow: var(--border-glow);
+}
+
+.post-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(0.5) contrast(1.2);
+    transition: var(--transition);
+}
+
+.post-card:hover .post-image {
+    filter: grayscale(0) contrast(1);
+}
+
+.post-content {
+    padding: 1.5rem;
+}
+
+.post-category {
+    color: var(--freddy-purple);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.post-excerpt {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.read-more {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.read-more::after {
+    content: '→';
+    transition: var(--transition);
+}
+
+.read-more:hover::after {
+    transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+.glitch:hover {
+    animation: glitch 0.3s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 4rem;
+    }
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to all blog posts
+    match /posts/{post} {
+      allow read: if true;
+      // Restricted write access: Only allow if authenticated
+      // (For now, allowing anyone to write so you can test the admin panel easily, 
+      // but you should change 'true' to 'request.auth != null' later)
+      allow write: if true; 
+    }
+  }
+}
